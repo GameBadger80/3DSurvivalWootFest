@@ -164,13 +164,14 @@ MonoBehaviour:
   playerCamera: {fileID: 8323148272722929813}
   walkSpeed: 6
   runSpeed: 12
+  crouchSpeed: 3
   jumpPower: 7
   gravity: 10
-  lookSpeed: 2
-  lookXLimit: 45
   defaultHeight: 2
   crouchHeight: 1
-  crouchSpeed: 3
+  lookSpeed: 2
+  lookXLimit: 45
+  invertLookY: 1
 --- !u!1 &6645842843952947693
 GameObject:
   m_ObjectHideFlags: 0
