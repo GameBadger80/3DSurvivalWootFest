@@ -451,6 +451,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 6013581520629244522, guid: 3e76981a2aa7a2545a6da395fc782b4a,
+        type: 3}
+      propertyPath: invertLookY
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
