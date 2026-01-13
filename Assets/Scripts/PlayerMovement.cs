@@ -98,7 +98,8 @@ public class PlayerMovement : MonoBehaviour
             bool isIdle = characterController.isGrounded &&
                           new Vector3(moveDirection.x, 0, moveDirection.z).magnitude < 0.1f;
 
-            animator.enabled = isIdle;
+            float speed = new Vector3(moveDirection.x, 0, moveDirection.z).magnitude;
+            animator.SetFloat("Speed", speed);
         }
     }
 
