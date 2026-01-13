@@ -30,11 +30,14 @@ public class PlayerMovement : MonoBehaviour
     private CharacterController characterController;
     private bool canMove = true;
 
+    private Animator animator;
+
     void Start()
     {
         characterController = GetComponent<CharacterController>();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -89,6 +92,14 @@ public class PlayerMovement : MonoBehaviour
         moveDirection.y -= gravity * Time.deltaTime;
 
         characterController.Move(moveDirection * Time.deltaTime);
+
+        if (animator != null)
+        {
+            bool isIdle = characterController.isGrounded &&
+                          new Vector3(moveDirection.x, 0, moveDirection.z).magnitude < 0.1f;
+
+            animator.enabled = isIdle;
+        }
     }
 
     void HandleMouseLook()
