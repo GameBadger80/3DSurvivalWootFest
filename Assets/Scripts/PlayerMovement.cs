@@ -84,8 +84,11 @@ public class PlayerMovement : MonoBehaviour
             if (moveDirection.y < 0)
                 moveDirection.y = -2f;
 
-            if (Input.GetButton("Jump") && !isCrouching)
+            if (Input.GetButtonDown("Jump") && !isCrouching)
+            {
                 moveDirection.y = jumpPower;
+                animator.SetTrigger("Jump");
+            }
         }
 
         // Gravity
