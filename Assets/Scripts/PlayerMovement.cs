@@ -7,11 +7,12 @@ public class PlayerMovement : MonoBehaviour
 {
     [Header("References")]
     public Camera playerCamera;
+    public Animator animator; // Animator for blend tree
 
     [Header("Movement")]
     public float walkSpeed = 6f;
-    public float runSpeed = 12f;
-    public float crouchSpeed = 3f;
+    public float runSpeed = 12f;   // Can be added later
+    public float crouchSpeed = 3f; // Can be added later
     public float jumpPower = 7f;
     public float gravity = 10f;
 
@@ -30,20 +31,22 @@ public class PlayerMovement : MonoBehaviour
     private CharacterController characterController;
     private bool canMove = true;
 
-    private Animator animator;
-
     void Start()
     {
         characterController = GetComponent<CharacterController>();
+
+        if (animator == null)
+            animator = GetComponent<Animator>(); // Safety check
+
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        animator = GetComponent<Animator>();
     }
 
     void Update()
     {
         HandleMovement();
         HandleMouseLook();
+        HandleAnimations();
     }
 
     void HandleMovement()
@@ -68,8 +71,9 @@ public class PlayerMovement : MonoBehaviour
             characterController.center = new Vector3(0, defaultHeight / 2f, 0);
         }
 
-        float inputX = Input.GetAxis("Vertical");
-        float inputY = Input.GetAxis("Horizontal");
+        // Input
+        float inputX = Input.GetAxis("Vertical");   // W/S keys
+        float inputY = Input.GetAxis("Horizontal"); // A/D keys
 
         Vector3 move = (forward * inputX + right * inputY).normalized * currentSpeed;
 
@@ -82,34 +86,25 @@ public class PlayerMovement : MonoBehaviour
         if (characterController.isGrounded)
         {
             if (moveDirection.y < 0)
-                moveDirection.y = -2f;
+                moveDirection.y = -2f; // Small downward force to stick to ground
 
             if (Input.GetButtonDown("Jump") && !isCrouching)
             {
                 moveDirection.y = jumpPower;
-                animator.SetTrigger("Jump");
+                animator.SetTrigger("JumpTrigger"); // Trigger jump in JumpLayer
             }
         }
 
         // Gravity
         moveDirection.y -= gravity * Time.deltaTime;
 
+        // Move the player
         characterController.Move(moveDirection * Time.deltaTime);
-
-        if (animator != null)
-        {
-            bool isIdle = characterController.isGrounded &&
-                          new Vector3(moveDirection.x, 0, moveDirection.z).magnitude < 0.1f;
-
-            float speed = new Vector3(moveDirection.x, 0, moveDirection.z).magnitude;
-            animator.SetFloat("Speed", speed);
-        }
     }
 
     void HandleMouseLook()
     {
-        if (!canMove)
-            return;
+        if (!canMove) return;
 
         float mouseX = Input.GetAxis("Mouse X") * lookSpeed;
         float mouseY = Input.GetAxis("Mouse Y") * lookSpeed;
@@ -120,5 +115,17 @@ public class PlayerMovement : MonoBehaviour
         playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0f, 0f);
         transform.rotation *= Quaternion.Euler(0f, mouseX, 0f);
     }
-}
 
+    void HandleAnimations()
+    {
+        if (animator == null) return;
+
+        // Horizontal = A/D, Vertical = W/S
+        float horizontal = Input.GetAxis("Horizontal");
+        float vertical = Input.GetAxis("Vertical");
+
+        // Smooth the values slightly for nicer blending
+        animator.SetFloat("Horizontal", horizontal, 0.1f, Time.deltaTime);
+        animator.SetFloat("Vertical", vertical, 0.1f, Time.deltaTime);
+    }
+}

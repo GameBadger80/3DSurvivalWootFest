@@ -1821,10 +1821,10 @@ Animator:
   m_GameObject: {fileID: 2978247018462813145}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 2255221d850daf642981c1a4eedf85a1, type: 3}
-  m_Controller: {fileID: 9100000, guid: ef6403663453e6a4cb106814a81e72b4, type: 2}
+  m_Controller: {fileID: 9100000, guid: 15f218f489183b846a446deeea93b6f9, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 1
@@ -1871,6 +1871,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   playerCamera: {fileID: 4590650645829417966}
+  animator: {fileID: 0}
   walkSpeed: 6
   runSpeed: 12
   crouchSpeed: 3
