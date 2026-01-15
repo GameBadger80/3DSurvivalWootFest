@@ -1,152 +1,123 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEditor;
 
 namespace DevionGames
 {
-	[InitializeOnLoad]
-	public class WriteInputManager
-	{
-		static WriteInputManager ()
-		{
-			if (!AxisDefined ("Change Speed")) {
-				AddAxis (new InputAxis () {
-					name = "Change Speed",
-					positiveButton = "left shift",
-					gravity = 1000,
-					dead = 0.1f,
-					sensitivity = 1000f,
-					type = AxisType.KeyOrMouseButton,
-					axis = 1
-				});
-			}
-			if (!AxisDefined ("Crouch")) {
-				AddAxis (new InputAxis () {
-					name = "Crouch",
-					positiveButton = "c",
-					gravity = 1000,
-					dead = 0.1f,
-					sensitivity = 1000f,
-					type = AxisType.KeyOrMouseButton,
-					axis = 1
-				});
-			}
-			if (!AxisDefined("No Control"))
-			{
-				AddAxis(new InputAxis()
-				{
-					name = "No Control",
-					positiveButton = "left ctrl",
-					gravity = 1000,
-					dead = 0.1f,
-					sensitivity = 1000f,
-					type = AxisType.KeyOrMouseButton,
-					axis = 1
-				});
-			}
-			if (!AxisDefined("Evade"))
-			{
-				AddAxis(new InputAxis()
-				{
-					name = "Evade",
-					positiveButton = "left alt",
-					gravity = 1000,
-					dead = 0.1f,
-					sensitivity = 1000f,
-					type = AxisType.KeyOrMouseButton,
-					axis = 1
-				});
-			}
-		}
+    [InitializeOnLoad]
+    public class WriteInputManager
+    {
+        static WriteInputManager()
+        {
+            TryAddAxis("Change Speed", "left shift");
+            TryAddAxis("Crouch", "c");
+            TryAddAxis("No Control", "left ctrl");
+            TryAddAxis("Evade", "left alt");
+        }
 
-		private static SerializedProperty GetChildProperty (SerializedProperty parent, string name)
-		{
-			SerializedProperty child = parent.Copy ();
-			child.Next (true);
-			do {
-				if (child.name == name)
-					return child;
-			} while (child.Next (false));
-			return null;
-		}
+        private static void TryAddAxis(string name, string key)
+        {
+            if (AxisDefined(name)) return;
 
-		private static bool AxisDefined (string axisName)
-		{
-			SerializedObject serializedObject = new SerializedObject (AssetDatabase.LoadAllAssetsAtPath ("ProjectSettings/InputManager.asset") [0]);
-			SerializedProperty axesProperty = serializedObject.FindProperty ("m_Axes");
+            AddAxis(new InputAxis()
+            {
+                name = name,
+                positiveButton = key,
+                gravity = 1000,
+                dead = 0.1f,
+                sensitivity = 1000f,
+                type = AxisType.KeyOrMouseButton,
+                axis = 1
+            });
+        }
 
-			axesProperty.Next (true);
-			axesProperty.Next (true);
-			while (axesProperty.Next (false)) {
-				SerializedProperty axis = axesProperty.Copy ();
-				axis.Next (true);
-				if (axis.stringValue == axisName)
-					return true;
-			}
-			return false;
-		}
+        private static bool AxisDefined(string axisName)
+        {
+            Object inputManager = AssetDatabase.LoadAllAssetsAtPath(
+                "ProjectSettings/InputManager.asset")[0];
 
-		public enum AxisType
-		{
-			KeyOrMouseButton = 0,
-			MouseMovement = 1,
-			JoystickAxis = 2
-		};
+            if (inputManager == null)
+                return false;
 
-		public class InputAxis
-		{
-			public string name;
-			public string descriptiveName;
-			public string descriptiveNegativeName;
-			public string negativeButton;
-			public string positiveButton;
-			public string altNegativeButton;
-			public string altPositiveButton;
+            SerializedObject so = new SerializedObject(inputManager);
+            SerializedProperty axes = so.FindProperty("m_Axes");
 
-			public float gravity;
-			public float dead;
-			public float sensitivity;
+            if (axes == null || !axes.isArray)
+                return false;
 
-			public bool snap = false;
-			public bool invert = false;
+            for (int i = 0; i < axes.arraySize; i++)
+            {
+                SerializedProperty axis = axes.GetArrayElementAtIndex(i);
+                SerializedProperty nameProp = axis.FindPropertyRelative("m_Name");
 
-			public AxisType type;
+                if (nameProp != null && nameProp.stringValue == axisName)
+                    return true;
+            }
 
-			public int axis;
-			public int joyNum;
-		}
+            return false;
+        }
 
-		private static void AddAxis (InputAxis axis)
-		{
-			if (AxisDefined (axis.name))
-				return;
+        private static SerializedProperty GetChildProperty(SerializedProperty parent, string name)
+        {
+            if (parent == null) return null;
+            return parent.FindPropertyRelative(name);
+        }
 
-			SerializedObject serializedObject = new SerializedObject (AssetDatabase.LoadAllAssetsAtPath ("ProjectSettings/InputManager.asset") [0]);
-			SerializedProperty axesProperty = serializedObject.FindProperty ("m_Axes");
+        public enum AxisType
+        {
+            KeyOrMouseButton = 0,
+            MouseMovement = 1,
+            JoystickAxis = 2
+        }
 
-			axesProperty.arraySize++;
-			serializedObject.ApplyModifiedProperties ();
+        public class InputAxis
+        {
+            public string name;
+            public string descriptiveName;
+            public string descriptiveNegativeName;
+            public string negativeButton;
+            public string positiveButton;
+            public string altNegativeButton;
+            public string altPositiveButton;
 
-			SerializedProperty axisProperty = axesProperty.GetArrayElementAtIndex (axesProperty.arraySize - 1);
+            public float gravity;
+            public float dead;
+            public float sensitivity;
 
-			GetChildProperty (axisProperty, "m_Name").stringValue = axis.name;
-			GetChildProperty (axisProperty, "descriptiveName").stringValue = axis.descriptiveName;
-			GetChildProperty (axisProperty, "descriptiveNegativeName").stringValue = axis.descriptiveNegativeName;
-			GetChildProperty (axisProperty, "negativeButton").stringValue = axis.negativeButton;
-			GetChildProperty (axisProperty, "positiveButton").stringValue = axis.positiveButton;
-			GetChildProperty (axisProperty, "altNegativeButton").stringValue = axis.altNegativeButton;
-			GetChildProperty (axisProperty, "altPositiveButton").stringValue = axis.altPositiveButton;
-			GetChildProperty (axisProperty, "gravity").floatValue = axis.gravity;
-			GetChildProperty (axisProperty, "dead").floatValue = axis.dead;
-			GetChildProperty (axisProperty, "sensitivity").floatValue = axis.sensitivity;
-			GetChildProperty (axisProperty, "snap").boolValue = axis.snap;
-			GetChildProperty (axisProperty, "invert").boolValue = axis.invert;
-			GetChildProperty (axisProperty, "type").intValue = (int)axis.type;
-			GetChildProperty (axisProperty, "axis").intValue = axis.axis - 1;
-			GetChildProperty (axisProperty, "joyNum").intValue = axis.joyNum;
+            public bool snap;
+            public bool invert;
 
-			serializedObject.ApplyModifiedProperties ();
-		}
-	}
+            public AxisType type;
+            public int axis;
+            public int joyNum;
+        }
+
+        private static void AddAxis(InputAxis axis)
+        {
+            Object inputManager = AssetDatabase.LoadAllAssetsAtPath(
+                "ProjectSettings/InputManager.asset")[0];
+
+            if (inputManager == null)
+                return;
+
+            SerializedObject so = new SerializedObject(inputManager);
+            SerializedProperty axes = so.FindProperty("m_Axes");
+
+            axes.arraySize++;
+            so.ApplyModifiedProperties();
+
+            SerializedProperty axisProp =
+                axes.GetArrayElementAtIndex(axes.arraySize - 1);
+
+            GetChildProperty(axisProp, "m_Name").stringValue = axis.name;
+            GetChildProperty(axisProp, "positiveButton").stringValue = axis.positiveButton;
+            GetChildProperty(axisProp, "gravity").floatValue = axis.gravity;
+            GetChildProperty(axisProp, "dead").floatValue = axis.dead;
+            GetChildProperty(axisProp, "sensitivity").floatValue = axis.sensitivity;
+            GetChildProperty(axisProp, "type").intValue = (int)axis.type;
+            GetChildProperty(axisProp, "axis").intValue = axis.axis - 1;
+            GetChildProperty(axisProp, "joyNum").intValue = axis.joyNum;
+
+            so.ApplyModifiedProperties();
+        }
+    }
 }

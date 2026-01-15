@@ -20,12 +20,12 @@ namespace DevionGames
         private static bool m_PointerOverTrigger = false;
 
         [RuntimeInitializeOnLoadMethod]
-        static void Initialize()
-        {
-            Camera camera = Camera.main;
-            if (camera.GetComponent<TriggerRaycaster>() == null)
-                camera.gameObject.AddComponent<TriggerRaycaster>();
-        }
+        //static void Initialize()
+        //{
+        //    Camera camera = Camera.main;
+        //    if (camera.GetComponent<TriggerRaycaster>() == null)
+        //        camera.gameObject.AddComponent<TriggerRaycaster>();
+        //}
 
 
         private void Start()
