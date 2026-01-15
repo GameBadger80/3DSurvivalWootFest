@@ -1871,11 +1871,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   playerCamera: {fileID: 4590650645829417966}
-  animator: {fileID: 0}
-  walkSpeed: 6
-  runSpeed: 12
+  animator: {fileID: 6111220633775782618}
+  walkSpeed: 2
+  runSpeed: 4
   crouchSpeed: 3
-  jumpPower: 7
+  jumpPower: 4
   gravity: 10
   defaultHeight: 2
   crouchHeight: 1

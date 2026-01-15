@@ -118,14 +118,27 @@ public class PlayerMovement : MonoBehaviour
 
     void HandleAnimations()
     {
-        if (animator == null) return;
+        if (animator == null)
+            return;
 
-        // Horizontal = A/D, Vertical = W/S
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
+        // Raw input
+        float h = Input.GetAxis("Horizontal"); // A / D
+        float v = Input.GetAxis("Vertical");   // W / S
 
-        // Smooth the values slightly for nicer blending
-        animator.SetFloat("Horizontal", horizontal, 0.1f, Time.deltaTime);
-        animator.SetFloat("Vertical", vertical, 0.1f, Time.deltaTime);
+        // Run key
+        bool isRunning = Input.GetKey(KeyCode.LeftShift);
+
+        // Slow down sideways animation when running
+        if (isRunning && Mathf.Abs(h) > 0.1f)
+        {
+            h *= 0.7f; // limit strafe influence while sprinting
+        }
+
+        // Walk = 1, Run = 2 (matches blend tree layout)
+        float speedMultiplier = isRunning ? 2f : 1f;
+
+        // Send values to Animator (smoothed)
+        animator.SetFloat("Horizontal", h * speedMultiplier, 0.1f, Time.deltaTime);
+        animator.SetFloat("Vertical", v * speedMultiplier, 0.1f, Time.deltaTime);
     }
 }
