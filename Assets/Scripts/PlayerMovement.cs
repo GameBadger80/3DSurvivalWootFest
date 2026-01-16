@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("References")]
     public Camera playerCamera;
     public Animator animator; // Animator for blend tree
+    public Transform visualRoot; // visual parent (NO rotation yet)
 
     [Header("Movement")]
     public float walkSpeed = 6f;

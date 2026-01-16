@@ -1870,6 +1870,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   playerCamera: {fileID: 4590650645829417966}
   animator: {fileID: 6111220633775782618}
+  visualRoot: {fileID: 2159495240716707908}
   walkSpeed: 2
   runSpeed: 4
   crouchSpeed: 3
