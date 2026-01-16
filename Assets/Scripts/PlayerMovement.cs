@@ -48,6 +48,11 @@ public class PlayerMovement : MonoBehaviour
         HandleMovement();
         HandleMouseLook();
         HandleAnimations();
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            animator.SetTrigger("GatherTrigger");
+        }
     }
 
     void HandleMovement()
@@ -57,6 +62,9 @@ public class PlayerMovement : MonoBehaviour
 
         Vector3 forward = transform.TransformDirection(Vector3.forward);
         Vector3 right = transform.TransformDirection(Vector3.right);
+
+        if (animator.GetCurrentAnimatorStateInfo(0).IsTag("Gather"))
+            return;
 
         // Select speed
         if (isCrouching)
