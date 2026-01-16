@@ -128,11 +128,7 @@ public class PlayerMovement : MonoBehaviour
         // Run key
         bool isRunning = Input.GetKey(KeyCode.LeftShift);
 
-        // Slow down sideways animation when running
-        if (isRunning && Mathf.Abs(h) > 0.1f)
-        {
-            h *= 0.7f; // limit strafe influence while sprinting
-        }
+        
 
         // Walk = 1, Run = 2 (matches blend tree layout)
         float speedMultiplier = isRunning ? 2f : 1f;
