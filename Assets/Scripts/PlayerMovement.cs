@@ -12,7 +12,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Movement")]
     public float walkSpeed = 6f;
-    public float runSpeed = 12f;   // Can be added later
+    public float runSpeed = 12f;   
     public float crouchSpeed = 3f; // Can be added later
     public float jumpPower = 7f;
     public float gravity = 10f;
@@ -91,11 +91,15 @@ public class PlayerMovement : MonoBehaviour
         moveDirection = move;
         moveDirection.y = verticalVelocity;
 
+
+        // Gravity
+        moveDirection.y -= gravity * Time.deltaTime;
+
         // Jump
         if (characterController.isGrounded)
         {
-            if (moveDirection.y < 0)
-                moveDirection.y = -2f; // Small downward force to stick to ground
+            if (moveDirection.y < -5)
+                moveDirection.y = -5f; // strong snap to ground (no hover)
 
             if (Input.GetButtonDown("Jump") && !isCrouching)
             {
@@ -103,9 +107,6 @@ public class PlayerMovement : MonoBehaviour
                 animator.SetTrigger("JumpTrigger"); // Trigger jump in JumpLayer
             }
         }
-
-        // Gravity
-        moveDirection.y -= gravity * Time.deltaTime;
 
         // Move the player
         characterController.Move(moveDirection * Time.deltaTime);
@@ -145,5 +146,9 @@ public class PlayerMovement : MonoBehaviour
         // Send values to Animator (smoothed)
         animator.SetFloat("Horizontal", h * speedMultiplier, 0.1f, Time.deltaTime);
         animator.SetFloat("Vertical", v * speedMultiplier, 0.1f, Time.deltaTime);
+
+        animator.SetBool("IsGrounded", characterController.isGrounded);
+        animator.SetFloat("VerticalVelocity", moveDirection.y);
+
     }
 }
