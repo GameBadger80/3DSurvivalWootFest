@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
@@ -7,14 +5,14 @@ public class PlayerMovement : MonoBehaviour
 {
     [Header("References")]
     public Camera playerCamera;
-    public Animator animator; // Animator for blend tree
-    public Transform visualRoot; // visual parent (NO rotation yet)
+    public Animator animator;
+    public Transform visualRoot; // visual parent (no rotation yet)
 
     [Header("Movement")]
-    public float walkSpeed = 6f;
-    public float runSpeed = 12f;   
-    public float crouchSpeed = 3f; // Can be added later
-    public float jumpPower = 7f;
+    public float walkSpeed = 2f;
+    public float runSpeed = 4f;
+    public float crouchSpeed = 1f;
+    public float jumpPower = 4f;
     public float gravity = 10f;
 
     [Header("Crouch")]
@@ -26,8 +24,8 @@ public class PlayerMovement : MonoBehaviour
     public float lookXLimit = 45f;
     public bool invertLookY = false;
 
-    private Vector3 moveDirection = Vector3.zero;
-    private float rotationX = 0f;
+    private Vector3 moveDirection;
+    private float rotationX;
     private float currentSpeed;
     private CharacterController characterController;
     private bool canMove = true;
@@ -36,8 +34,8 @@ public class PlayerMovement : MonoBehaviour
     {
         characterController = GetComponent<CharacterController>();
 
-        if (animator == null)
-            animator = GetComponent<Animator>(); // Safety check
+        if (!animator)
+            animator = GetComponent<Animator>();
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -49,24 +47,32 @@ public class PlayerMovement : MonoBehaviour
         HandleMouseLook();
         HandleAnimations();
 
+        // Gather test
         if (Input.GetKeyDown(KeyCode.E))
         {
             animator.SetTrigger("GatherTrigger");
         }
     }
 
+    // ---------------- MOVEMENT ----------------
+
     void HandleMovement()
     {
         bool isRunning = Input.GetKey(KeyCode.LeftShift);
         bool isCrouching = Input.GetKey(KeyCode.LeftControl);
 
-        Vector3 forward = transform.TransformDirection(Vector3.forward);
-        Vector3 right = transform.TransformDirection(Vector3.right);
-
+        // Stop movement during gather BUT still apply gravity
         if (animator.GetCurrentAnimatorStateInfo(0).IsTag("Gather"))
+        {
+            moveDirection.y -= gravity * Time.deltaTime;
+            characterController.Move(moveDirection * Time.deltaTime);
             return;
+        }
 
-        // Select speed
+        Vector3 forward = transform.forward;
+        Vector3 right = transform.right;
+
+        // Speed + capsule
         if (isCrouching)
         {
             currentSpeed = crouchSpeed;
@@ -81,36 +87,36 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Input
-        float inputX = Input.GetAxis("Vertical");   // W/S keys
-        float inputY = Input.GetAxis("Horizontal"); // A/D keys
+        float inputX = Input.GetAxis("Vertical");   // W / S
+        float inputY = Input.GetAxis("Horizontal"); // A / D
 
         Vector3 move = (forward * inputX + right * inputY).normalized * currentSpeed;
 
-        // Preserve vertical velocity
-        float verticalVelocity = moveDirection.y;
-        moveDirection = move;
-        moveDirection.y = verticalVelocity;
+        // Horizontal movement
+        moveDirection.x = move.x;
+        moveDirection.z = move.z;
 
-
-        // Gravity
-        moveDirection.y -= gravity * Time.deltaTime;
-
-        // Jump
+        // Ground / air logic
         if (characterController.isGrounded)
         {
-            if (moveDirection.y < -5)
-                moveDirection.y = -5f; // strong snap to ground (no hover)
+            if (moveDirection.y < 0f)
+                moveDirection.y = -10f; // snap to ground
 
             if (Input.GetButtonDown("Jump") && !isCrouching)
             {
                 moveDirection.y = jumpPower;
-                animator.SetTrigger("JumpTrigger"); // Trigger jump in JumpLayer
+                animator.SetTrigger("JumpTrigger");
             }
         }
+        else
+        {
+            moveDirection.y -= gravity * Time.deltaTime;
+        }
 
-        // Move the player
         characterController.Move(moveDirection * Time.deltaTime);
     }
+
+    // ---------------- CAMERA ----------------
 
     void HandleMouseLook()
     {
@@ -123,32 +129,27 @@ public class PlayerMovement : MonoBehaviour
         rotationX = Mathf.Clamp(rotationX, -lookXLimit, lookXLimit);
 
         playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0f, 0f);
-        transform.rotation *= Quaternion.Euler(0f, mouseX, 0f);
+        transform.Rotate(Vector3.up * mouseX);
     }
+
+    // ---------------- ANIMATIONS ----------------
 
     void HandleAnimations()
     {
-        if (animator == null)
-            return;
+        if (!animator) return;
 
-        // Raw input
-        float h = Input.GetAxis("Horizontal"); // A / D
-        float v = Input.GetAxis("Vertical");   // W / S
-
-        // Run key
+        float h = Input.GetAxis("Horizontal");
+        float v = Input.GetAxis("Vertical");
         bool isRunning = Input.GetKey(KeyCode.LeftShift);
 
-        
-
-        // Walk = 1, Run = 2 (matches blend tree layout)
         float speedMultiplier = isRunning ? 2f : 1f;
 
-        // Send values to Animator (smoothed)
         animator.SetFloat("Horizontal", h * speedMultiplier, 0.1f, Time.deltaTime);
         animator.SetFloat("Vertical", v * speedMultiplier, 0.1f, Time.deltaTime);
 
         animator.SetBool("IsGrounded", characterController.isGrounded);
         animator.SetFloat("VerticalVelocity", moveDirection.y);
 
+       
     }
 }
