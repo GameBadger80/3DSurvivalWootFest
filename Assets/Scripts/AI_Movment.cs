@@ -1,99 +1,74 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class AI_Movement : MonoBehaviour
 {
     [Header("Movement")]
-    [SerializeField] private float moveSpeed = 0.2f;
+    [SerializeField] private float wanderRadius = 5f;
+    [SerializeField] private float walkSpeed = 1.5f;
 
     [Header("Timing")]
     [SerializeField] private Vector2 walkTimeRange = new Vector2(3f, 6f);
-    [SerializeField] private Vector2 waitTimeRange = new Vector2(5f, 7f);
+    [SerializeField] private Vector2 waitTimeRange = new Vector2(2f, 4f);
 
-    [Header("Obstacle Avoidance")]
-    [SerializeField] private float obstacleCheckDistance = 1f;
-    [SerializeField] private LayerMask obstacleLayers;
-
+    private NavMeshAgent agent;
     private Animator animator;
 
     private float walkTimer;
     private float waitTimer;
 
     private bool isWalking;
-    private Vector3 moveDirection;
 
     void Start()
     {
+        agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
 
-        ResetWalkTimer();
+        agent.speed = walkSpeed;
+        agent.updateRotation = true;
+
         ResetWaitTimer();
-        ChooseDirection();
     }
 
     void Update()
     {
+        animator.SetBool("isRunning", agent.velocity.magnitude > 0.1f);
+
         if (isWalking)
-            Walk();
-        else
-            Wait();
-    }
-
-    private void Walk()
-    {
-        animator.SetBool("isRunning", true);
-
-        // Obstacle detection
-        if (Physics.Raycast(transform.position + Vector3.up * 0.2f, moveDirection, obstacleCheckDistance, obstacleLayers))
         {
-            StopWalking();
-            ChooseDirection();
-            return;
+            walkTimer -= Time.deltaTime;
+
+            if (walkTimer <= 0f || agent.remainingDistance <= agent.stoppingDistance)
+            {
+                StopWalking();
+            }
         }
+        else
+        {
+            waitTimer -= Time.deltaTime;
 
-        walkTimer -= Time.deltaTime;
-        transform.position += moveDirection * moveSpeed * Time.deltaTime;
-
-        if (walkTimer <= 0f)
-            StopWalking();
+            if (waitTimer <= 0f)
+            {
+                StartWalking();
+            }
+        }
     }
 
-    private void Wait()
+    private void StartWalking()
     {
-        animator.SetBool("isRunning", false);
+        Vector3 target = GetRandomNavMeshPosition(wanderRadius);
 
-        waitTimer -= Time.deltaTime;
+        agent.SetDestination(target);
 
-        if (waitTimer <= 0f)
-            ChooseDirection();
+        isWalking = true;
+        walkTimer = Random.Range(walkTimeRange.x, walkTimeRange.y);
     }
 
     private void StopWalking()
     {
         isWalking = false;
+        agent.ResetPath();
         ResetWaitTimer();
-    }
-
-    private void ChooseDirection()
-    {
-        isWalking = true;
-        ResetWalkTimer();
-
-        int randomDir = Random.Range(0, 4);
-
-        switch (randomDir)
-        {
-            case 0: moveDirection = Vector3.forward; break;
-            case 1: moveDirection = Vector3.right; break;
-            case 2: moveDirection = Vector3.left; break;
-            case 3: moveDirection = Vector3.back; break;
-        }
-
-        transform.rotation = Quaternion.LookRotation(moveDirection);
-    }
-
-    private void ResetWalkTimer()
-    {
-        walkTimer = Random.Range(walkTimeRange.x, walkTimeRange.y);
     }
 
     private void ResetWaitTimer()
@@ -101,9 +76,20 @@ public class AI_Movement : MonoBehaviour
         waitTimer = Random.Range(waitTimeRange.x, waitTimeRange.y);
     }
 
+    private Vector3 GetRandomNavMeshPosition(float radius)
+    {
+        Vector3 randomDirection = Random.insideUnitSphere * radius;
+        randomDirection += transform.position;
+
+        NavMeshHit hit;
+        NavMesh.SamplePosition(randomDirection, out hit, radius, NavMesh.AllAreas);
+
+        return hit.position;
+    }
+
     private void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawRay(transform.position + Vector3.up * 0.2f, moveDirection * obstacleCheckDistance);
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, wanderRadius);
     }
 }
