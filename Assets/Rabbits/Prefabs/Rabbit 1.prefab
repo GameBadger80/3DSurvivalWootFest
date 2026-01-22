@@ -729,7 +729,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4677745771901032}
   - component: {fileID: 95674028643950644}
-  - component: {fileID: 6264862365792234184}
+  - component: {fileID: 2835901924592822769}
+  - component: {fileID: 287984350848219073}
+  - component: {fileID: 1270358599322070527}
   m_Layer: 0
   m_Name: Rabbit 1
   m_TagString: Untagged
@@ -765,7 +767,7 @@ Animator:
   m_GameObject: {fileID: 1588090451174212}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 0962bdca27eaca34aaa15f7fdf608faf, type: 3}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 8beaedaf7a4023642b48737ef7ee04b7, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -777,7 +779,55 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &6264862365792234184
+--- !u!65 &2835901924592822769
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1588090451174212}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &287984350848219073
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1588090451174212}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 48
+  m_CollisionDetection: 0
+--- !u!114 &1270358599322070527
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -786,9 +836,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1588090451174212}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c00a3e4d8a561f544b1a109c355ffc44, type: 3}
+  m_Script: {fileID: 11500000, guid: ff02f03ff9b8bd84da4b0f64871049be, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FiveRabbitsDemo.AnimatorParamatersChange
+  m_EditorClassIdentifier: Assembly-CSharp::AI_Movment
+  moveSpeed: 0.2
+  walkTimeRange: {x: 3, y: 6}
+  waitTimeRange: {x: 5, y: 7}
+  obstacleCheckDistance: 1
+  obstacleLayers:
+    serializedVersion: 2
+    m_Bits: 512
 --- !u!1 &1593323770353162
 GameObject:
   m_ObjectHideFlags: 0
