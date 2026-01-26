@@ -140,16 +140,22 @@ public class PlayerMovement : MonoBehaviour
 
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
+
         bool isRunning = Input.GetKey(KeyCode.LeftShift);
+        bool isCrouching = Input.GetKey(KeyCode.LeftControl);
 
         float speedMultiplier = isRunning ? 2f : 1f;
 
         animator.SetFloat("Horizontal", h * speedMultiplier, 0.1f, Time.deltaTime);
         animator.SetFloat("Vertical", v * speedMultiplier, 0.1f, Time.deltaTime);
 
+        
         animator.SetBool("IsGrounded", characterController.isGrounded);
         animator.SetFloat("VerticalVelocity", moveDirection.y);
 
-       
+        int crouchLayer = animator.GetLayerIndex("CrouchLayer");
+        animator.SetLayerWeight(crouchLayer, isCrouching ? 1f : 0f);
+
+
     }
 }

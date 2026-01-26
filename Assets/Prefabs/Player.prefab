@@ -1873,12 +1873,12 @@ MonoBehaviour:
   visualRoot: {fileID: 2159495240716707908}
   walkSpeed: 2
   runSpeed: 4
-  crouchSpeed: 3
+  crouchSpeed: 1
   jumpPower: 4
   gravity: 10
   defaultHeight: 2
   crouchHeight: 1
-  lookSpeed: 2
+  lookSpeed: 6
   lookXLimit: 45
   invertLookY: 0
 --- !u!1 &3049478424700525445
