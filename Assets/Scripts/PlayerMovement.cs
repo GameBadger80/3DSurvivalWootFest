@@ -24,6 +24,13 @@ public class PlayerMovement : MonoBehaviour
     public float lookXLimit = 45f;
     public bool invertLookY = false;
 
+    [Header("Camera Crouch")]
+    public float standingCameraHeight = 1.6f;
+    public float crouchCameraHeight = 1.0f;
+    public float cameraCrouchSpeed = 8f;
+    private Vector3 cameraLocalPos;
+
+
     private Vector3 moveDirection;
     private float rotationX;
     private float currentSpeed;
@@ -32,6 +39,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
+        cameraLocalPos = playerCamera.transform.localPosition;
         characterController = GetComponent<CharacterController>();
 
         if (!animator)
@@ -43,6 +51,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        HandleCameraCrouch();
         HandleMovement();
         HandleMouseLook();
         HandleAnimations();
@@ -130,6 +139,25 @@ public class PlayerMovement : MonoBehaviour
 
         playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0f, 0f);
         transform.Rotate(Vector3.up * mouseX);
+    }
+
+    void HandleCameraCrouch()
+    {
+        bool isCrouching = Input.GetKey(KeyCode.LeftControl);
+
+        float targetY = isCrouching ? crouchCameraHeight : standingCameraHeight;
+
+        Vector3 targetPos = new Vector3(
+            cameraLocalPos.x,
+            targetY,
+            cameraLocalPos.z
+        );
+
+        playerCamera.transform.localPosition = Vector3.Lerp(
+            playerCamera.transform.localPosition,
+            targetPos,
+            Time.deltaTime * cameraCrouchSpeed
+        );
     }
 
     // ---------------- ANIMATIONS ----------------
