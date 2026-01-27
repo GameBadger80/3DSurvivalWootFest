@@ -13391,6 +13391,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Rusty Sword
       objectReference: {fileID: 0}
+    - target: {fileID: 7505499703950806449, guid: 8d1205197ce57bf48b0d586eccfd9e61,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -20934,6 +20939,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Shield
+      objectReference: {fileID: 0}
+    - target: {fileID: 6955947972541771316, guid: caa4712265fb87f48917ca9e4be3350a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -134901,7 +134911,7 @@ PrefabInstance:
     - target: {fileID: 2217017165105714522, guid: 7711700c499322241ad0a6161fccb38f,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -36.5416
+      value: -35.091743
       objectReference: {fileID: 0}
     - target: {fileID: 2452283189092255581, guid: 7711700c499322241ad0a6161fccb38f,
         type: 3}
@@ -134931,7 +134941,7 @@ PrefabInstance:
     - target: {fileID: 2452283189092255581, guid: 7711700c499322241ad0a6161fccb38f,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -81.331604
+      value: -79.881744
       objectReference: {fileID: 0}
     - target: {fileID: 3227985642732245333, guid: 7711700c499322241ad0a6161fccb38f,
         type: 3}

@@ -2620,18 +2620,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 5792820102444301303}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &3504580598109554014 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 440406481, guid: 07c05240867455c47887199078a82e2c,
-    type: 3}
-  m_PrefabInstance: {fileID: 5792820102444301303}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 519f6d56fa1bb3b409a519c9a7a198a7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &5792820102444301303
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2640,30 +2628,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 8277663194983554766, guid: 07c05240867455c47887199078a82e2c,
-        type: 3}
-      propertyPath: m_Motions.Array.size
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 8277663194983554766, guid: 07c05240867455c47887199078a82e2c,
-        type: 3}
-      propertyPath: 'm_Motions.Array.data[7]'
-      value: 
-      objectReference: {fileID: 3504580598109554014}
-    - target: {fileID: 8277663194983554766, guid: 07c05240867455c47887199078a82e2c,
-        type: 3}
-      propertyPath: 'm_Motions.Array.data[8]'
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 8277663194983554772, guid: 07c05240867455c47887199078a82e2c,
         type: 3}
       propertyPath: m_Name
       value: DefaultAvatar
-      objectReference: {fileID: 0}
-    - target: {fileID: 8277663196261490464, guid: 07c05240867455c47887199078a82e2c,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8277663196261490464, guid: 07c05240867455c47887199078a82e2c,
         type: 3}
@@ -2715,8 +2683,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 440406494, guid: 07c05240867455c47887199078a82e2c, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
