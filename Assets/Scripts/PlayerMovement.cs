@@ -3,28 +3,28 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
 {
-    [Header("References")]
+    //[Header("References")]
     public Camera playerCamera;
     public Animator animator;
     public Transform visualRoot; // visual parent (no rotation yet)
 
-    [Header("Movement")]
+    //[Header("Movement")]
     public float walkSpeed = 2f;
     public float runSpeed = 4f;
     public float crouchSpeed = 1f;
     public float jumpPower = 4f;
     public float gravity = 10f;
 
-    [Header("Crouch")]
+    //[Header("Crouch")]
     public float defaultHeight = 2f;
     public float crouchHeight = 1f;
 
-    [Header("Mouse Look")]
+    //[Header("Mouse Look")]
     public float lookSpeed = 2f;
     public float lookXLimit = 45f;
     public bool invertLookY = false;
 
-    [Header("Camera Crouch")]
+    //[Header("Camera Crouch")]
     public float standingCameraHeight = 1.6f;
     public float crouchCameraHeight = 1.0f;
     public float cameraCrouchSpeed = 8f;
