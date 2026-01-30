@@ -733,6 +733,7 @@ GameObject:
   - component: {fileID: 287984350848219073}
   - component: {fileID: 1270358599322070527}
   - component: {fileID: 3355952449260444248}
+  - component: {fileID: 295126114839163036}
   m_Layer: 0
   m_Name: Rabbit 1
   m_TagString: Untagged
@@ -866,6 +867,19 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &295126114839163036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1588090451174212}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0016705272510bb46b4d9079a9cf4054, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InteractableObject
+  ItemName: Rabbit
 --- !u!1 &1593323770353162
 GameObject:
   m_ObjectHideFlags: 0
