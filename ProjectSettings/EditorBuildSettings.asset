@@ -14,5 +14,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/happytimevillage.unity
     guid: d67de68de6c753d47aabfdaec9499e4a
+  - enabled: 1
+    path: Assets/PurrLobby/LobbyScenes/NetworkedScene.unity
+    guid: e6ba6bbd3072e63449ec09bda4a1b5e6
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0
