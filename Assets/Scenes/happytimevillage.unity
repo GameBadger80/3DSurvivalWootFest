@@ -130,8 +130,8 @@ GameObject:
   m_Component:
   - component: {fileID: 12236895}
   - component: {fileID: 12236894}
-  - component: {fileID: 12236893}
   - component: {fileID: 12236892}
+  - component: {fileID: 12236893}
   - component: {fileID: 12236896}
   m_Layer: 0
   m_Name: NetworkManager
@@ -8965,9 +8965,9 @@ PrefabInstance:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 12236895}
   - {fileID: 985652763}
   - {fileID: 1031497492}
   - {fileID: 2001340053}
   - {fileID: 533830605}
-  - {fileID: 12236895}
   - {fileID: 1431789836}
